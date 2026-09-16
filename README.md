@@ -117,6 +117,4 @@ Future improvements could include:
 - Adding explicit human evaluation of response relevance, grounding, helpfulness, and tone.
 - Developing a higher-recall escalation mechanism.
 
-## Project Title
 
-**TrustSupport: An Evidence-Grounded AI Customer Support Agent**
