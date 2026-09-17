@@ -1,0 +1,43 @@
+TrustSupport LLM-as-Judge Rubric
+
+Score each dimension from 1 to 5.
+
+1. Relevance
+1 = Does not address the customer's issue.
+3 = Partly addresses the issue but misses important details.
+5 = Directly addresses the customer's actual issue.
+
+2. Grounding
+1 = Unsupported, invented, or unrelated information.
+3 = Generally grounded but vague or only partly supported by the evidence.
+5 = Clearly grounded in the retrieved historical response/evidence.
+
+3. Helpfulness
+1 = Gives no useful next step or resolution.
+3 = Gives a partially useful next step.
+5 = Gives a clear, actionable, appropriate next step.
+
+4. Tone
+1 = Inappropriate, rude, dismissive, or confusing.
+3 = Acceptable but impersonal or awkward.
+5 = Professional, empathetic, and clear.
+
+5. Hallucination
+1 = Contains major invented claims, promises, policies, or facts.
+3 = Contains a minor unsupported claim or ambiguity.
+5 = Contains no unsupported factual claim.
+
+Overall score:
+1 = Unacceptable
+2 = Poor
+3 = Adequate
+4 = Good
+5 = Strong
+
+For each response, provide:
+- Five dimension scores
+- Overall score
+- One short reason
+
+Human agreement:
+After LLM scoring, a human should independently score the same 20 examples using the same rubric. Compare LLM and human scores using exact agreement or mean absolute difference. Do not invent agreement numbers.
