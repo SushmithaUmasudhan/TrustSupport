@@ -63,11 +63,16 @@ The escalation classifier identifies cases that may require human intervention, 
 ## Results
 
 ### Intent Classification
+A majority-class baseline was also evaluated by always predicting the most common intent, Order & Delivery.
 
-The final balanced intent classifier achieved:
+| Model | Accuracy | Macro-F1 |
+|---|---:|---:|
+| Majority-class baseline | 30.0% | ≈0.058 |
+| TF-IDF + Logistic Regression | 30.0% | 0.060 |
+| Balanced TF-IDF + Logistic Regression | 50.0% | 0.420 |
+| Final held-out evaluation | 47.5% | 0.419 |
 
-- Accuracy: 47.5%
-- Macro-F1: 0.419
+The unweighted model performed almost the same as the trivial majority baseline, while class balancing substantially improved macro-F1.
 
 Evaluation was performed on a 40-example held-out test set.
 
@@ -83,6 +88,14 @@ The escalation classifier achieved:
 
 The low escalation recall shows that accuracy alone is not sufficient for evaluating safety-oriented escalation.
 
+### LLM-as-Judge Evaluation
+
+A structured LLM-as-judge rubric evaluated Relevance, Grounding, Helpfulness, Tone, Hallucination, and Overall quality using 1–5 scores.
+
+Twenty examples were independently rated by a human using the same rubric. The LLM judge achieved 80% exact agreement with human overall ratings, with a quadratic Cohen's kappa of 0.916.
+
+Individual dimension agreement was lower, so the LLM judge was used as a supplementary evaluator.
+
 ## Failure Analysis
 
 The main observed failure modes were:
@@ -92,6 +105,24 @@ The main observed failure modes were:
 3. Frustration was sometimes expressed indirectly.
 4. Intent misclassification contributed to some escalation failures.
 5. The small labelled dataset limited the diversity of escalation examples.
+
+## Decision Log
+
+1. Selected AmazonHelp for its large support-interaction volume.
+2. Used `response_tweet_id` to reconstruct customer-brand relationships.
+3. Defined eight intents to keep classification focused.
+4. Treated unresolved support as an escalation signal.
+5. Created 200 hand-labelled examples for evaluation.
+6. Used stratified splitting to handle class imbalance.
+7. Compared unweighted and balanced Logistic Regression.
+8. Selected the balanced classifier based on improved macro-F1.
+9. Used TF-IDF for historical-response retrieval.
+10. Excluded self-matches to prevent retrieval leakage.
+11. Grounded responses in historical AmazonHelp replies.
+12. Analysed escalation false negatives as safety failures.
+13. Validated the LLM judge against human ratings.
+14. Used held-out evaluation for final results.
+15. Reported limitations due to the small labelled dataset.
 
 ## Repository Files
 
@@ -114,7 +145,19 @@ Future improvements could include:
 - Increasing the size and diversity of the labelled dataset.
 - Using transformer-based intent classification.
 - Improving semantic retrieval.
-- Adding explicit human evaluation of response relevance, grounding, helpfulness, and tone.
 - Developing a higher-recall escalation mechanism.
+- Expanding human and LLM response-quality evaluation to a larger sample.
+
+## Reproduction
+
+1. Download the TWCS dataset and place `twcs.csv` in the project folder.
+2. Run:
+
+```bash
+python extract_amazon.py
+python build_intents.py
+python complete_agent.py
+python evaluate_responses.py
+The evaluation reports held-out intent and escalation metrics. The original TWCS dataset is not included in the repository because of its size.
 
 
